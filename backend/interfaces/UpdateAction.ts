@@ -1,4 +1,4 @@
 export enum UpdateAction {
-  add = "add",
-  remove = "remove",
+	add = "add",
+	remove = "remove",
 }

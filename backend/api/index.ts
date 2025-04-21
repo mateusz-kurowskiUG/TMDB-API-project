@@ -27,9 +27,9 @@ app.use("/api/admin", adminRouter);
 app.use("/api/cast", castRouter);
 
 app.get("/api/recommendations", (req, res) => {
-  res.send("Hello World!");
+	res.send("Hello World!");
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+	console.log(`Example app listening on port ${port}`);
 });

@@ -1,6 +1,6 @@
 interface GenreInterface {
-  id: string;
-  TMDBId: number;
-  name: string;
+	id: string;
+	TMDBId: number;
+	name: string;
 }
 export default GenreInterface;

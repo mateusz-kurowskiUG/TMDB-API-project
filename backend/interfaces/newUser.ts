@@ -1,6 +1,6 @@
 interface newUserInterface {
-  id?: string;
-  password: string;
-  email: string;
+	id?: string;
+	password: string;
+	email: string;
 }
 export default newUserInterface;

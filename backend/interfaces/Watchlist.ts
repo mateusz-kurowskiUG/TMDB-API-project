@@ -1,7 +1,7 @@
-import MovieInterface from "./Movie";
+import type MovieInterface from "./Movie";
 
 interface WatchlistInterface {
-  id: string;
-  movies: MovieInterface[];
+	id: string;
+	movies: MovieInterface[];
 }
 export default WatchlistInterface;
