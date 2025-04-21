@@ -1,10 +1,12 @@
 import { Request, Response, Router } from "express";
 import db from "../../db/connect";
+
 import newUserInterface from "../../interfaces/newUser";
 import { emailRegex, passwordRegex } from "../../data/regex";
-const usersRouter = Router();
 
-usersRouter.post("/register", async (req: Request, res: Response) => {
+const authRouter = Router();
+
+authRouter.post("/register", async (req: Request, res: Response) => {
   if (!req.body)
     return res.status(400).send({ msg: "Please enter all fields" });
   if (!req.body["email"] || !req.body["password"])
@@ -43,7 +45,7 @@ usersRouter.post("/register", async (req: Request, res: Response) => {
     .send({ msg: registerResult.msg, data: { id, email, role } });
 });
 
-usersRouter.post("/login", async (req: Request, res: Response) => {
+authRouter.post("/login", async (req: Request, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ msg: "Please enter all fields" });
@@ -55,43 +57,4 @@ usersRouter.post("/login", async (req: Request, res: Response) => {
   return res.status(200).json(loginResult);
 });
 
-usersRouter.get("/profile/:id", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  if (!id) return res.status(400).json({ msg: "Please enter all fields" });
-  const profileResult = await db.getUserProfile(id);
-  if (!profileResult.result) {
-    return res.status(400).json(profileResult);
-  }
-  return res.status(200).json(profileResult);
-});
-usersRouter.put("/profile", async (req: Request, res: Response) => {
-  const { id, name, password, email, role, new_password } = req.body;
-  if (!id) return res.status(400).json({ msg: "Please enter userId" });
-  if (!name && !password && !email) {
-    return res.status(400).json({ msg: "Please enter all fields" });
-  }
-  const updateProfileResult = await db.updateUserProfile({
-    id,
-    password,
-    email,
-    role,
-    new_password,
-  });
-  if (role)
-    return res.status(403).json({ msg: "Updating role is not permitted" });
-  if (!updateProfileResult.result) {
-    return res.status(400).json(updateProfileResult);
-  }
-  return res.status(200).json(updateProfileResult);
-});
-usersRouter.get("/:id/stats", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  if (!id) return res.status(400).json({ msg: "Please enter all fields" });
-  const statsResult = await db.getUserStats(id);
-  if (!statsResult.result) {
-    return res.status(400).json(statsResult);
-  }
-  return res.status(200).json(statsResult);
-});
-
-export default usersRouter;
+export default authRouter;

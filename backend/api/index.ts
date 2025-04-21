@@ -8,6 +8,7 @@ import moviesRouter from "./routes/movies.routes";
 import adminRouter from "./routes/admin.routes";
 import bodyParser from "body-parser";
 import castRouter from "./routes/cast.routes";
+import authRouter from "./routes/auth.routes";
 
 const app = express();
 const port = 3000;
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
+app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/tmdb/movies", TMDBRouter);
 app.use("/api/watchlist", watchlistRouter);
