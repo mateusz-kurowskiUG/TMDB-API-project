@@ -6,48 +6,19 @@ import { DBMessage } from "../../types/DBResponse";
 import { Hono } from "hono";
 
 const authRouter = new Hono()
-  .post(
-    "/register",
-    zValidator("json", authSchema),
-    async (c): Promise<void> => {
-      const { email, password } = c.req.valid("json");
-      try {
-        const registerResult = await userService.createUser({
-          email,
-          password,
-        });
-
-        if (!registerResult) {
-          c.json({ message: "Could not create a user" }, 400);
-          return;
-        }
-        const { id, email: registeredEmail, role } = registerResult;
-        c.json(
-          {
-            message: DBMessage.USER_CREATED,
-            user: { id, email: registeredEmail, role },
-          },
-          200
-        );
-      } catch {
-        c.json({ message: "Could not create a user" }, 500);
-      }
-    }
-  )
-  .post("/login", zValidator("json", authSchema), async (c): Promise<void> => {
+  .post("/register", zValidator("json", authSchema), async (c) => {
     const { email, password } = c.req.valid("json");
     try {
-      const registerResult = await userService.authenticateUser({
+      const registerResult = await userService.createUser({
         email,
         password,
       });
 
-      if (!registerResult) {
-        c.json({ message: "Could not create a user" }, 400);
-        return;
-      }
+      if (!registerResult)
+        return c.json({ message: "User already exists" }, 400);
+
       const { id, email: registeredEmail, role } = registerResult;
-      c.json(
+      return c.json(
         {
           message: DBMessage.USER_CREATED,
           user: { id, email: registeredEmail, role },
@@ -55,7 +26,30 @@ const authRouter = new Hono()
         200
       );
     } catch {
-      c.json({ message: "Could not create a user" }, 500);
+      return c.json({ message: "Could not create a user" }, 500);
+    }
+  })
+  .post("/login", zValidator("json", authSchema), async (c) => {
+    const { email, password } = c.req.valid("json");
+    try {
+      const registerResult = await userService.authenticateUser({
+        email,
+        password,
+      });
+
+      if (!registerResult)
+        return c.json({ message: "Could not create a user" }, 400);
+
+      const token = registerResult;
+      return c.json(
+        {
+          message: DBMessage.USER_CREATED,
+          token,
+        },
+        200
+      );
+    } catch {
+      return c.json({ message: "Could not sign in" }, 500);
     }
   });
 

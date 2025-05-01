@@ -5,7 +5,7 @@ export interface User {
   role: string;
 }
 
-export interface NewUserInterface {
+export interface NewUserBody {
   email: string;
   password: string;
 }

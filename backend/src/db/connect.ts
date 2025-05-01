@@ -165,7 +165,7 @@ class Db {
     dotenv.config();
     const envs = {
       TMDB_ACCESS_TOKEN: process.env.TMDB_ACCESS_TOKEN || "",
-      API_KEY: process.env.API_KEY || "",
+      API_KEY: process.env.TMDB_API_KEY || "",
       NEO4J_URI: process.env.NEO4J_URI || "",
       NEO4J_USERNAME: process.env.NEO4J_USERNAME || "",
       NEO4J_PASSWORD: process.env.NEO4J_PASSWORD || "",

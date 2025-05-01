@@ -1,15 +1,15 @@
-import { db } from "./../api/index";
-import type User from "../types/users";
-import type NewUserInterface from "../types/users";
+import { db } from "../index";
 import { usersTable } from "../db/schema";
 import { ROLE } from "../types/Role";
 import { eq } from "drizzle-orm";
 import { checkPasswordMatch, createToken, hashPassword } from "../utils/auth";
+import type { NewUserBody, User } from "../types/users";
 
 const getUserById = async (id: string): Promise<User | undefined> => {
   const found = await db.select().from(usersTable).where(eq(usersTable.id, id));
   return found.length ? found[0] : undefined;
 };
+
 const getUserByEmail = async (email: string): Promise<User | undefined> => {
   const found = await db
     .select()
@@ -21,7 +21,10 @@ const getUserByEmail = async (email: string): Promise<User | undefined> => {
 const createUser = async ({
   email,
   password,
-}: NewUserInterface): Promise<User | undefined> => {
+}: NewUserBody): Promise<User | undefined> => {
+  const exists = await getUserByEmail(email);
+  if (exists) return;
+
   const hashedPassword = await hashPassword(password);
   const inserted = await db
     .insert(usersTable)
@@ -37,7 +40,7 @@ const createUser = async ({
 const authenticateUser = async ({
   email,
   password: passwordCandidate,
-}: NewUserInterface): Promise<string | undefined> => {
+}: NewUserBody): Promise<string | undefined> => {
   const foundUser = await getUserByEmail(email);
   if (!foundUser) return;
 
