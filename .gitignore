@@ -3,3 +3,6 @@ node_modules
 movie_ids*
 links.md
 file.txt
+
+redis.conf
+users.acl

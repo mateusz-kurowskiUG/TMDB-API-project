@@ -34,5 +34,7 @@ declare module "bun" {
     readonly AUTH_AUTHENTIK_TOKEN: string;
 
     readonly PROD: boolean;
+
+    readonly REDIS_URL: string;
   }
 }

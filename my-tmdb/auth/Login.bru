@@ -5,13 +5,14 @@ meta {
 }
 
 post {
-  url: {{baseUrl}}/api/auth/signin/authentik
-  body: none
+  url: {{baseUrl}}/api/auth/sign-in
+  body: json
   auth: none
 }
 
 body:json {
   {
-    
+    "email":"test@test.com",
+    "password":"Admin123."
   }
 }
