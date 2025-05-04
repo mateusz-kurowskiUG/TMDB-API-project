@@ -25,21 +25,21 @@ function Layout({ children }: { children: React.ReactNode }) {
   const [searchResults, setSearchResults] = useState<MovieInterface[]>([]);
 
   useEffect(() => {
-    if (
-      localStorage.getItem("loggedIn") === "true" &&
-      !loggedIn &&
-      !user.userId
-    ) {
-      const userId = localStorage.getItem("userId");
-      const email = localStorage.getItem("email");
-      const role = localStorage.getItem("role");
-      setUser({
-        userId,
-        email,
-        role,
-      });
-      setLoggedIn(true);
-    }
+    // if (
+    //   localStorage.getItem("loggedIn") === "true" &&
+    //   !loggedIn &&
+    //   !user.userId
+    // ) {
+    //   const userId = localStorage.getItem("userId");
+    //   const email = localStorage.getItem("email");
+    //   const role = localStorage.getItem("role");
+    //   setUser({
+    //     userId,
+    //     email,
+    //     role,
+    //   });
+    setLoggedIn(true);
+    // }
   }, []);
 
   const handleLogout = () => {
@@ -70,7 +70,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       }}
     >
       <NavBar />
-      {loggedIn && user && user.userId ? (
+      {loggedIn ? (
         children
       ) : wantToLogin ? (
         <LoginForm

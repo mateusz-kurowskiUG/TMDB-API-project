@@ -9,10 +9,10 @@ function Popular() {
   useLayoutEffect(() => {
     const loadMovies = async () => {
       const popularResponse = await axios.get(
-        "http://localhost:3000/api/tmdb/movies/popular/"
+        "http://localhost:3000/api/movie/popular"
       );
 
-      const popularMovies = popularResponse.data.data.map(
+      const popularMovies = popularResponse.data.results.map(
         (movie: MovieInterface) => {
           return (
             <PopularMovie

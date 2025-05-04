@@ -18,7 +18,7 @@ function LoginForm({
     if (!email || !password) return alert("Please fill in all fields");
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/users/login",
+        "http://localhost:3000/api/auth/sign-in",
         {
           email,
           password,
@@ -26,13 +26,13 @@ function LoginForm({
       );
       if (response.status === 200) {
         setLoggedIn(true);
-        const { id, email, role } = response.data.data;
+        // const { id, email, role } = response.data.data;
 
-        setUser({ userId: id, email, role });
-        localStorage.setItem("userId", id);
-        localStorage.setItem("email", email);
-        localStorage.setItem("role", role);
-        localStorage.setItem("loggedIn", "true");
+        // setUser({ userId: id, email, role });
+        // localStorage.setItem("userId", id);
+        // localStorage.setItem("email", email);
+        // localStorage.setItem("role", role);
+        // localStorage.setItem("loggedIn", "true");
       } else {
         alert("Wrong creds");
       }

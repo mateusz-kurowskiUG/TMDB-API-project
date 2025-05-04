@@ -32,7 +32,7 @@ function PopularMovie({
       <Link href={`/movie/${movie.TMDBId}`}>
         <figure>
           <Image
-            src={movie.poster_path}
+            src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
             height={200}
             width={160}
             alt={movie.title}

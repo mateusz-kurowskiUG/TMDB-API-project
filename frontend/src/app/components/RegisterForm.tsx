@@ -12,7 +12,7 @@ function RegisterForm({ validationSchema, initialValues }) {
     if (!email || !password) return alert("Please fill in all fields");
     try {
       const registerResponse = await axios.post(
-        "http://localhost:3000/api/users/register",
+        "http://localhost:3000/api/auth/sign-up",
         {
           email,
           password,
