@@ -1,0 +1,14 @@
+{
+  "SignInPage": {},
+  "SignUpPage": {},
+  "HomePage": {
+    "title": "title",
+    "about": "about"
+  },
+  "AuthPage": {
+    "Tabs": {
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
+    }
+  }
+}

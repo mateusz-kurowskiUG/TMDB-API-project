@@ -82,7 +82,7 @@ class Db {
   async connectToClassicDriver(): Promise<any> {
     const driver = neo4j.driver(
       "neo4j://localhost:7687",
-      neo4j.auth.basic("neo4j", "test1234")
+      neo4j.auth.basic("neo4j", "test1234"),
     );
     this.cDriver = driver;
     console.log("connected to neo4j classic driver");
@@ -265,7 +265,7 @@ class Db {
         budget: 1,
         status: "status",
       },
-      [testGenre3.properties().id]
+      [testGenre3.properties().id],
     );
     const playlist12: PlaylistInterface = {
       id: "b47fa852-dec5-408f-a7d7-f8ab62297610",
@@ -322,7 +322,7 @@ class Db {
       genres.map(async (genre) => {
         const json = await genre.properties();
         return json;
-      })
+      }),
     );
     return { result: true, msg: DBMessage.GENRES_FOUND, data: genresJson };
   }
@@ -339,7 +339,7 @@ class Db {
         const genres = movie.get("genre").map((genre) => genre.properties());
         const json = await movie.properties();
         return { ...json, genres };
-      })
+      }),
     );
     return { result: true, msg: DBMessage.MOVIES_FOUND, data: moviesJson };
   }
@@ -460,13 +460,13 @@ class Db {
       users.map(async (user) => {
         const json = await user.properties();
         return json;
-      })
+      }),
     );
     return jsoned;
   }
 
   async updateUserProfile(
-    user: User & { new_password: string }
+    user: User & { new_password: string },
   ): Promise<UpdateUserProfileResponse> {
     const { id, password, email, new_password } = user;
     const userToUpdate = await this.users.find(id);
@@ -625,13 +625,13 @@ class Db {
             data: undefined,
           };
         return genre;
-      })
+      }),
     );
   }
 
   async updateMovie(
     movieId: string,
-    update: MovieUpdateInterface
+    update: MovieUpdateInterface,
   ): Promise<MovieUpdateResponse> {
     const movie = await this.movies.find(movieId);
     if (!movie)
@@ -671,27 +671,6 @@ class Db {
   }
   // admin
 
-  async loginUser(email: string, password: string): Promise<LoginResponse> {
-    const user = await (await this.users.all({ email })).first();
-    if (!user) {
-      return {
-        result: false,
-        msg: DBMessage.USER_NOT_FOUND,
-        data: undefined,
-      };
-    }
-    if (user.get("password") !== bcrypt.hashSync(password, this.salt)) {
-      return {
-        result: false,
-        msg: DBMessage.INVALID_CREDIENTIALS,
-        data: undefined,
-      };
-    }
-    const userJson = await user.properties();
-    delete userJson.password;
-    return { result: true, msg: DBMessage.USER_LOGGED_IN, data: userJson };
-  }
-
   async getMovieById(movieId: string): Promise<GetMovieResponse> {
     const movie = await this.movies.find(movieId);
     if (!movie)
@@ -708,7 +687,7 @@ class Db {
 
   async createMovie(
     movie: MovieInterface,
-    genres: string[]
+    genres: string[],
   ): Promise<MovieCreationResponse> {
     const createdMovie = await this.movies.create(movie);
     if (!createdMovie)
@@ -812,7 +791,7 @@ class Db {
     if (!movie)
       return { result: false, msg: DBMessage.MOVIE_NOT_FOUND, data: undefined };
     const genres = (await movie.get("genre")).map((genre) =>
-      genre.properties()
+      genre.properties(),
     );
     const movieJson = movie.properties();
     return {
@@ -825,7 +804,7 @@ class Db {
   // WATCHLISTS
   async addToWatchlist(
     userId: string,
-    movieId: string
+    movieId: string,
   ): Promise<AddToWatchlistResponse> {
     const user = await this.users.find(userId);
     if (!user)
@@ -850,7 +829,7 @@ class Db {
       };
     }
     const isInWatchlist = watchlist.find(
-      (movie) => movie.properties().id === movieId
+      (movie) => movie.properties().id === movieId,
     );
     if (!isInWatchlist) {
       await user.relateTo(movie, "watchlist", { date: new Date() });
@@ -891,7 +870,7 @@ class Db {
 
   async deleteFromWatchlist(
     userId: string,
-    movieId: string
+    movieId: string,
   ): Promise<DeleteFromWatchlistResponse> {
     const user = await this.users.find(userId);
     if (!user)
@@ -914,7 +893,7 @@ class Db {
         data: undefined,
       };
     const isInWatchlist = watchlist.find(
-      (movie) => movie.properties().id === movieId
+      (movie) => movie.properties().id === movieId,
     );
     if (!isInWatchlist)
       return {
@@ -938,7 +917,7 @@ class Db {
 
   async createPlaylist(
     userId: string,
-    name: string
+    name: string,
   ): Promise<CreatePlaylistResponse> {
     const user = await this.users.find(userId);
     if (!name)
@@ -952,7 +931,7 @@ class Db {
     const date = q2.records[0].get("date");
     const parsed = new Date(Number(date));
     const randomString = await session.run(
-      `return apoc.text.random(10) as output`
+      `return apoc.text.random(10) as output`,
     );
     const randomStrRes = randomString.records[0].get("output");
     const newPlaylist: PlaylistInterface = {
@@ -1043,7 +1022,7 @@ class Db {
         const movies = await this.getMoviesInPlaylist(playlist.id);
 
         return { ...playlist, movies };
-      })
+      }),
     );
     return {
       result: true,
@@ -1054,7 +1033,7 @@ class Db {
 
   async addToPlaylist(
     playlistId: string,
-    movieId: string
+    movieId: string,
   ): Promise<AddToPlaylistResponse> {
     const playlist = await this.playlists.find(playlistId);
     if (!playlist)
@@ -1074,7 +1053,7 @@ class Db {
         data: undefined,
       };
     const alreadyInPlaylist = isInPlaylist.find(
-      (movie) => movie.properties().id === movieId
+      (movie) => movie.properties().id === movieId,
     );
     if (alreadyInPlaylist)
       return {
@@ -1098,7 +1077,7 @@ class Db {
 
   async removeFromPlaylist(
     playlistId: string,
-    movieId: string
+    movieId: string,
   ): Promise<RemoveFromPlaylistResponse> {
     const playlist = await this.playlists.find(playlistId);
     if (!playlist)
@@ -1118,7 +1097,7 @@ class Db {
         data: undefined,
       };
     const alreadyInPlaylist = await isInPlaylist.find(
-      (movie) => movie.properties().id === movieId
+      (movie) => movie.properties().id === movieId,
     );
     if (!alreadyInPlaylist)
       return {
@@ -1142,7 +1121,7 @@ class Db {
 
   async renamePlaylist(
     playlistId: string,
-    name: string
+    name: string,
   ): Promise<RenamePlaylistResponse> {
     const playlist = await this.playlists.find(playlistId);
     if (!playlist)
@@ -1262,7 +1241,7 @@ class Db {
       return { result: false, msg: DBMessage.MOVIE_NOT_FOUND, data: undefined };
     const usersReviews = await this.getReviewsByUser(user);
     const alreadyReviewed = usersReviews.find(
-      (review) => review.movieId === movieId
+      (review) => review.movieId === movieId,
     );
     if (alreadyReviewed)
       return {
@@ -1307,7 +1286,7 @@ class Db {
   }
   async deleteReview(
     movieId: string,
-    reviewId: string
+    reviewId: string,
   ): Promise<DeleteReviewResponse> {
     const reviewNotFound: DeleteReviewResponse = {
       result: false,
@@ -1321,7 +1300,7 @@ class Db {
     const movieReviews = await this.getReviewsByMovie(movieId);
     if (!movieReviews.result || !movieReviews.data) return reviewNotFound;
     const reviewToDelete = movieReviews.data.find(
-      (review) => review.id === reviewId
+      (review) => review.id === reviewId,
     );
 
     if (!reviewToDelete) return reviewNotFound;
@@ -1358,7 +1337,7 @@ class Db {
     const genres = [
       ...watchlistResult.data?.flatMap((movie) => movie.genres),
       ...playlistsResult.data?.flatMap((playlist) =>
-        playlist.movies?.flatMap((movie) => movie.genres)
+        playlist.movies?.flatMap((movie) => movie.genres),
       ),
     ];
     const genresWithoutDuplicates = _.uniqBy(genres, (genre) => genre.id);
@@ -1375,7 +1354,7 @@ class Db {
     const session = db2.cDriver.session();
     const result = await session.run(
       `MATCH (n) WITH n, rand() AS r ORDER BY r LIMIT 5
-RETURN n`
+RETURN n`,
     );
 
     const movies = result.records.map((record) => {

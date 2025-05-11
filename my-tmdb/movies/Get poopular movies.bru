@@ -1,0 +1,17 @@
+meta {
+  name: Get poopular movies
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/movie/popular?language=en-US&page=1&region=en
+  body: none
+  auth: inherit
+}
+
+params:query {
+  language: en-US
+  page: 1
+  region: en
+}

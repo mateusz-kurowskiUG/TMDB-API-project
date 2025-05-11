@@ -1,11 +1,9 @@
 declare module "bun" {
   interface Env {
-    // APP
-
-    readonly API_READ: string;
-    readonly TBDB_POSTER_PATH: string;
     readonly TMDB_ACCESS_TOKEN: string;
     readonly TMDB_API_KEY: string;
+    readonly TMDB_BASE_URL: string;
+    readonly TMDB_POSTER_PATH: string;
 
     readonly DATABASE_URL: string;
     readonly PG_HOST: string;
@@ -22,18 +20,6 @@ declare module "bun" {
     readonly JWT_AUDIENCE: string;
     readonly JWT_ISSUER: string;
     readonly JWT_SECRET: string;
-
-    readonly AUTH_SECRET: string;
-    readonly AUTH_URL: string;
-
-    readonly AUTH_AUTHENTIK_AUTHORIZATION: string;
-    readonly AUTH_AUTHENTIK_ID: string;
-    readonly AUTH_AUTHENTIK_ISSUER: string;
-    readonly AUTH_AUTHENTIK_JWKS: string;
-    readonly AUTH_AUTHENTIK_SECRET: string;
-    readonly AUTH_AUTHENTIK_TOKEN: string;
-
-    readonly PROD: boolean;
 
     readonly REDIS_URL: string;
   }
